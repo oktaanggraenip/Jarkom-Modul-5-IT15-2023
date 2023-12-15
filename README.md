@@ -17,9 +17,10 @@
 # <a name="VLSM"></a> VLSM
 
 
-# <a name="Konfigurasi GNS"></a> Konfigurasi GNS
+# <a name="Konfigurasi"></a> Konfigurasi GNS
 ## Config Router
 - Aura
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
 # DHCP config for eth0
 auto eth0
@@ -39,6 +40,7 @@ iface eth2 inet static
 ```
 
 - Heiter
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Aura-A3
 auto eth0
@@ -61,6 +63,7 @@ iface eth2 inet static
 ```
 
 - Frieren
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Aura-A4
 auto eth0
@@ -68,6 +71,7 @@ iface eth0 inet static
 	address 10.71.14.138
 	netmask 255.255.255.252
 	gateway 10.71.14.137
+
 
 # Stark-A5
 auto eth1
@@ -83,6 +87,7 @@ iface eth2 inet static
 ```
 
 - Himmel
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Frieren-A6
 auto eth0
@@ -105,6 +110,7 @@ iface eth2 inet static
 ```
 
 - Fern
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # SchwerMountain-A8
 auto eth0
@@ -128,6 +134,7 @@ iface eth2 inet static
 
 ## Config Server
 - Richter
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
 # Fern-eth0
 auto eth0
@@ -139,6 +146,7 @@ iface eth0 inet static
 ```
 
 - Revolte
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Switch2-eth0
 auto eth0
@@ -149,6 +157,7 @@ iface eth0 inet static
 ```
 
 - Stark
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Frieren-eth0
 auto eth0
@@ -159,6 +168,7 @@ iface eth0 inet static
 ```
 
 - Sein
+Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Switch3-eth0
 auto eth0
@@ -167,8 +177,6 @@ iface eth2 inet static
 	netmask 255.255.252.0
     gateway 10.71.8.1
 ```
-
-Setelah dilakukan konfigurasi pada server, jalankan `echo "nameserver 192.168.122.1" > /etc/resolv.conf` pada masing-masing server
 
 ## Config Client/Host
 - SchwerMountain
@@ -258,66 +266,134 @@ Masuk kembali ke `Aura` dan jalankan iptables `iptables -t nat -A POSTROUTING -o
 
 ## Config DNS pada Richter
 ```
-echo "nameserver 192.168.122.1" > /etc/resolv.conf
-
 apt-get update
 apt-get install bind9 -y
 
-cp /etc/bind/named.conf.options /etc/bind/named.conf.options.backup
-
-echo "options {
+echo 'options {
+    directory "/var/cache/bind";
     forwarders {
          192.168.122.1;
-         8.8.8.8;
     };
-
     // dnssec-validation auto;
-    allow-query{any;};
-
-    directory "/var/cache/bind";
-
+    allow-query { any; };
     listen-on-v6 { any; };
-};" > /etc/bind/named.conf.options
-
-service bind9 restart
+};' > /etc/bind/named.conf.options
 ```
+
+Tambahkan command berikut pada `etc/bind/named.conf` dan `etc/bind/named.conf.local`
+```
+echo 'controls {
+    inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
+};
+
+include "/etc/bind/rndc.key";' > /etc/bind/named.conf
+
+echo 'controls {
+    inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
+};
+
+include "/etc/bind/rndc.key";' > /etc/bind/named.conf.local
+```
+Kemudian restart bind9 dengan command
+`service bind9 restart`
 
 ## Config DHCP pada Revolte
 - Lakukan konfigurasi pada `Aura`, `Heiter`, `Frieren`, `Himmel`, `Fern`
 
-Config dengan memasukkan IP Revolte `10.71.14.130`
+Config dengan memasukkan IP Richter `10.71.14.150` ke `/etc/default/isc-dhcp-relay`
 ```
+apt-get update
 apt-get install isc-dhcp-relay -y
 
-echo "SERVERS="10.71.14.130"
+echo 'SERVERS="10.71.14.150"
 INTERFACES="eth0 eth1 eth2"
-OPTIONS="
+OPTIONS=' > /etc/default/isc-dhcp-relay
 
 ## IP forwarding dan acc sumber
-echo "net.ipv4.ip_forward=1
-net.ipv4.conf.all.accept_source_route=1" >> /etc/sysctl.conf
-
-sysctl -p
+echo 'net.ipv4.ip_forward=1
+net.ipv4.conf.all.accept_source_route=1' > /etc/sysctl.conf
 ```
+Kemudian jalankan dhcp dengan `service isc-dhcp-relay restart`
+
 
 - Konfigurasi pada `Revolte`
 ```
-apt-get install isc-dhcp-relay -y
+apt-get update
+apt-get install isc-dhcp-server -y
 
-echo 'INTERFACESv4="eth0"' > /etc/default/isc-dhcp-server
+echo 'INTERFACESv4="eth0"
+INTERFACESv6="" ' > /etc/default/isc-dhcp-server
 
-echo '
+echo 'ddns-update-style none;
+option domain-name "example.org";
+option domain-name-servers 10.71.14.150;
+
+default-lease-time 600;
+max-lease-time 7200;
+
+authoritative;
+log-facility local7;
+
 # A1
-# A2
-# A3
-# A4
-# A5
-# A6
-# A7
-# A8
-# A9
-# A10
-' > /etc/dhcp/dhcpd.conf
-```
+subnet 10.71.8.0 netmask 255.255.252.0 {
+    range 10.71.8.1 10.71.11.254;
+    option routers 10.71.8.1;
+    option broadcast-address 10.71.11.255;
+    option domain-name-servers 10.71.14.150;
+}
 
-Kemudian restart server dhcp dengan command `service isc-dhcp-server restart`
+# A2
+subnet 10.71.0.0 netmask 255.255.248.0 {
+    range 10.71.0.1 10.71.7.254;
+    option routers 10.71.0.1;
+    option broadcast-address 10.71.7.255;
+    option domain-name-servers 10.71.14.150;
+}
+
+# A3
+subnet 10.71.14.132 netmask 255.255.255.252 {
+    option routers 10.71.14.134;
+}
+
+# A4
+subnet 10.71.14.136 netmask 255.255.255.252 {
+    option routers 10.71.14.138;
+}
+
+# A5
+subnet 10.71.14.140 netmask 255.255.255.252 {
+    option routers 10.71.14.142;
+}
+
+# A6
+subnet 10.71.14.144 netmask 255.255.255.252 {
+    option routers 10.71.14.138;
+}
+
+# A7
+subnet 10.71.12.0 netmask 255.255.254.0 {
+    range 10.71.12.1 10.71.13.254;
+    option routers 10.71.12.2;
+    option broadcast-address 10.71.13.255;
+    option domain-name-servers 10.71.14.150;
+}
+
+# A8
+subnet 10.71.14.0 netmask 255.255.255.128 {
+    range 10.71.14.1 10.71.14.126;
+    option routers 10.71.14.2;
+    option broadcast-address 10.71.14.127;
+    option domain-name-servers 192.223.14.134;
+}
+
+# A9
+subnet 10.71.14.148 netmask 255.255.255.252 {
+    option routers 10.71.14.150;
+}
+
+# A10
+subnet 10.71.14.128 netmask 255.255.255.252 {
+    option routers 10.71.14.130;
+}' > /etc/dhcp/dhcpd.conf
+```
+Kemudian restart dhcp server dengan command `service isc-dhcp-server restart`
