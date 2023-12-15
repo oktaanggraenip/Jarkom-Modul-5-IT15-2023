@@ -11,6 +11,18 @@
 - [Konfigurasi GNS](#Konfigurasi)
 - [Routing](#Routing)
 
+### Pengerjaan Soal
+- [Soal 1](#Soal1)
+- [Soal 2](#Soal2)
+- [Soal 3](#Soal3)
+- [Soal 4](#Soal4)
+- [Soal 5](#Soal5)
+- [Soal 6](#Soal6)
+- [Soal 7](#Soal7)
+- [Soal 8](#Soal8)
+- [Soal 9](#Soal9)
+- [Soal 10](#Soal10)
+
 # <a name="Topologi"></a> Topologi
 
 
@@ -19,7 +31,7 @@
 
 # <a name="Konfigurasi"></a> Konfigurasi GNS
 ## Config Router
-- Aura
+- Aura <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
 # DHCP config for eth0
@@ -39,7 +51,7 @@ iface eth2 inet static
     netmask 255.255.255.252
 ```
 
-- Heiter
+- Heiter <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Aura-A3
@@ -62,7 +74,7 @@ iface eth2 inet static
 	netmask 255.255.252.0
 ```
 
-- Frieren
+- Frieren <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Aura-A4
@@ -86,7 +98,7 @@ iface eth2 inet static
 	netmask 255.255.255.252
 ```
 
-- Himmel
+- Himmel <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Frieren-A6
@@ -109,7 +121,7 @@ iface eth2 inet static
 	netmask 255.255.255.128
 ```
 
-- Fern
+- Fern <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # SchwerMountain-A8
@@ -133,7 +145,7 @@ iface eth2 inet static
 ```
 
 ## Config Server
-- Richter
+- Richter <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
 # Fern-eth0
@@ -145,7 +157,7 @@ iface eth0 inet static
 
 ```
 
-- Revolte
+- Revolte <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Switch2-eth0
@@ -156,7 +168,7 @@ iface eth0 inet static
     gateway 10.71.14.129
 ```
 
-- Stark
+- Stark <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Frieren-eth0
@@ -167,7 +179,7 @@ iface eth0 inet static
     gateway 10.71.14.141
 ```
 
-- Sein
+- Sein <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1 nameserver 10.71.14.150' > /etc/resolv.conf`
 ```
 # Switch3-eth0
@@ -396,4 +408,36 @@ subnet 10.71.14.128 netmask 255.255.255.252 {
     option routers 10.71.14.130;
 }' > /etc/dhcp/dhcpd.conf
 ```
-Kemudian restart dhcp server dengan command `service isc-dhcp-server restart`
+Kemudian restart dhcp server dengan command `service isc-dhcp-server restart` <br>
+
+## <a name="Soal1"></a> Soal 1
+#### Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Aura menggunakan iptables, tetapi tidak ingin menggunakan MASQUERADE.
+
+## <a name="Soal2"></a> Soal 2
+#### Kalian diminta untuk melakukan drop semua TCP dan UDP kecuali port 8080 pada TCP.
+
+## <a name="Soal3"></a> Soal 3
+#### Kepala Suku North Area meminta kalian untuk membatasi DHCP dan DNS Server hanya dapat dilakukan ping oleh maksimal 3 device secara bersamaan, selebihnya akan di drop.
+
+## <a name="Soal4"></a> Soal 4
+#### Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan oleh masyarakat yang berada pada GrobeForest.
+
+## <a name="Soal5"></a> Soal 5
+#### Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
+
+## <a name="Soal6"></a> Soal 6
+#### Lalu, karena ternyata terdapat beberapa waktu di mana network administrator dari WebServer tidak bisa stand by, sehingga perlu ditambahkan rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek).
+
+## <a name="Soal7"></a> Soal 7
+#### Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Sein dengan Port 80 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan dan request dari client yang mengakses Stark dengan port 443 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan.
+
+## <a name="Soal8"></a> Soal 8
+#### Karena berbeda koalisi politik, maka subnet dengan masyarakat yang berada pada Revolte dilarang keras mengakses WebServer hingga masa pencoblosan pemilu kepala suku 2024 berakhir. Masa pemilu (hingga pemungutan dan penghitungan suara selesai) kepala suku bersamaan dengan masa pemilu Presiden dan Wakil Presiden Indonesia 2024.
+
+## <a name="Soal9"></a> Soal 9
+#### Sadar akan adanya potensial saling serang antar kubu politik, maka WebServer harus dapat secara otomatis memblokir  alamat IP yang melakukan scanning port dalam jumlah banyak (maksimal 20 scan port) di dalam selang waktu 10 menit. (clue: test dengan nmap)
+
+## <a name="Soal10"></a> Soal 10
+Karena kepala suku ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level. 
+
+
