@@ -24,7 +24,7 @@
 - [Soal 10](#Soal10)
 
 # <a name="Topologi"></a> Topologi
-
+ <img width="411" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
 
 # <a name="VLSM"></a> VLSM
 
