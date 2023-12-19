@@ -7,7 +7,7 @@
 
 ## Daftar Isi
 - [Topologi](#Topologi)
-- [VLSM](#VLSM)
+- [Tabel Perhitungan](#TabelPerhitungan)
 - [Konfigurasi GNS](#Konfigurasi)
 - [Routing](#Routing)
 
@@ -26,7 +26,8 @@
 # <a name="Topologi"></a> Topologi
  <img width="411" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
 
-# <a name="VLSM"></a> VLSM
+# <a name="TabelPerhitungan"></a> Tabel Perhitungan
+![WhatsApp Image 2023-12-19 at 16 24 45_2e33c4b1](https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/ca6ce936-5fb8-4cae-8d11-d96cfb2834e9)
 
 
 # <a name="Konfigurasi"></a> Konfigurasi GNS
