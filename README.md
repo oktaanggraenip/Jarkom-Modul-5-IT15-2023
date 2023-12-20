@@ -6,32 +6,22 @@
 | Brigita Naraduhita P.P. | 5027211055  |
 
 ## Daftar Isi
-- [Topologi](#Topologi)
-- [Tabel Perhitungan](#TabelPerhitungan)
-- [Konfigurasi GNS](#Konfigurasi)
-- [Routing](#Routing)
+- [Topologi]
+- [Tabel Perhitungan]
+- [Konfigurasi GNS]
+- [Routing]
+- [Pengerjaan Soal]
 
-### Pengerjaan Soal
-- [Soal 1](#Soal1)
-- [Soal 2](#Soal2)
-- [Soal 3](#Soal3)
-- [Soal 4](#Soal4)
-- [Soal 5](#Soal5)
-- [Soal 6](#Soal6)
-- [Soal 7](#Soal7)
-- [Soal 8](#Soal8)
-- [Soal 9](#Soal9)
-- [Soal 10](#Soal10)
 
-# <a name="Topologi"></a> Topologi
+# Topologi
  <img width="411" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
 
-# <a name="TabelPerhitungan"></a> Tabel Perhitungan
+# Tabel Perhitungan
 ![WhatsApp Image 2023-12-19 at 16 24 45_2e33c4b1](https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/ca6ce936-5fb8-4cae-8d11-d96cfb2834e9)
 
 
-# <a name="Konfigurasi"></a> Konfigurasi GNS
-## Config Router
+# Konfigurasi GNS
+## Konfig Router
 - Aura <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
@@ -191,7 +181,7 @@ iface eth2 inet static
     gateway 10.71.8.1
 ```
 
-## Config Client/Host
+## Konfig Client/Host
 - SchwerMountain
 ```
 # SchwerMountain-A8
@@ -234,7 +224,7 @@ iface eth0 inet static
 ```
 
 
-# <a name="Routing"></a> Routing
+# Routing
 - Aura
 ```
 route add -net 10.71.14.132 netmask 255.255.255.252 gw 10.71.14.134
@@ -277,7 +267,7 @@ route add -net 0.0.0.0 netmask 0.0.0.0 gw 10.71.14.1
 
 Masuk kembali ke `Aura` dan jalankan iptables `iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.71.0.0/16`
 
-## Config DNS pada Richter
+## Konfig DNS pada Richter
 ```
 apt-get update
 apt-get install bind9 -y
@@ -310,7 +300,7 @@ include "/etc/bind/rndc.key";' > /etc/bind/named.conf.local
 Kemudian restart bind9 dengan command
 `service bind9 restart`
 
-## Config DHCP pada Revolte
+## Konfig DHCP pada Revolte
 - Lakukan konfigurasi pada `Aura`, `Heiter`, `Frieren`, `Himmel`, `Fern`
 
 Config dengan memasukkan IP Richter `10.71.14.150` ke `/etc/default/isc-dhcp-relay`
@@ -411,34 +401,43 @@ subnet 10.71.14.128 netmask 255.255.255.252 {
 ```
 Kemudian restart dhcp server dengan command `service isc-dhcp-server restart` <br>
 
-## <a name="Soal1"></a> Soal 1
+## Soal 1
 #### Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Aura menggunakan iptables, tetapi tidak ingin menggunakan MASQUERADE.
+Jawab:
+### Masuk ke `Aura`
 
-## <a name="Soal2"></a> Soal 2
+IPETH0="$(ip -br a | grep eth0 | awk '{print $NF}' | cut -d'/' -f1)"
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT -s 10.71.0.1/21 --to-source "$IPETH0"
+
+Kemudian cek command tersebut dengan command berikut
+```
+iptables -t nat -L -n -v
+```
+Kemudian lakukan `ping google.com` dari salah satu host, misalnya `TurkRegion`.
+
+## Soal 2
 #### Kalian diminta untuk melakukan drop semua TCP dan UDP kecuali port 8080 pada TCP.
+Jawab:
+### Masuk ke `TurkRegion`
+Jalankan command berikut ini untuk melakukan drop port semua port TCP dan UDP kecuali port 8080 `--dport 8080`
+```
+iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -p tcp -j DROP
+iptables -A INPUT -p udp -j DROP
+```
+Kemudian cek command tersebut menggunakan `iptables -L`
 
-## <a name="Soal3"></a> Soal 3
+## Soal 3
 #### Kepala Suku North Area meminta kalian untuk membatasi DHCP dan DNS Server hanya dapat dilakukan ping oleh maksimal 3 device secara bersamaan, selebihnya akan di drop.
+Jawab:
+### Masuk ke `Revolte` (DHCP) dan `Richter` (DNS)
+Jalankan command berikut untuk menentukan protokol yang akan digunakan `(icmp)` dan membatasi connection dengan `connlimit`
+```
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
 
-## <a name="Soal4"></a> Soal 4
-#### Lakukan pembatasan sehingga koneksi SSH pada Web Server hanya dapat dilakukan oleh masyarakat yang berada pada GrobeForest.
+Kemudian cek kembali commandnya menggunakan `iptables -L`
 
-## <a name="Soal5"></a> Soal 5
-#### Selain itu, akses menuju WebServer hanya diperbolehkan saat jam kerja yaitu Senin-Jumat pada pukul 08.00-16.00.
-
-## <a name="Soal6"></a> Soal 6
-#### Lalu, karena ternyata terdapat beberapa waktu di mana network administrator dari WebServer tidak bisa stand by, sehingga perlu ditambahkan rule bahwa akses pada hari Senin - Kamis pada jam 12.00 - 13.00 dilarang (istirahat maksi cuy) dan akses di hari Jumat pada jam 11.00 - 13.00 juga dilarang (maklum, Jumatan rek).
-
-## <a name="Soal7"></a> Soal 7
-#### Karena terdapat 2 WebServer, kalian diminta agar setiap client yang mengakses Sein dengan Port 80 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan dan request dari client yang mengakses Stark dengan port 443 akan didistribusikan secara bergantian pada Sein dan Stark secara berurutan.
-
-## <a name="Soal8"></a> Soal 8
-#### Karena berbeda koalisi politik, maka subnet dengan masyarakat yang berada pada Revolte dilarang keras mengakses WebServer hingga masa pencoblosan pemilu kepala suku 2024 berakhir. Masa pemilu (hingga pemungutan dan penghitungan suara selesai) kepala suku bersamaan dengan masa pemilu Presiden dan Wakil Presiden Indonesia 2024.
-
-## <a name="Soal9"></a> Soal 9
-#### Sadar akan adanya potensial saling serang antar kubu politik, maka WebServer harus dapat secara otomatis memblokir  alamat IP yang melakukan scanning port dalam jumlah banyak (maksimal 20 scan port) di dalam selang waktu 10 menit. (clue: test dengan nmap)
-
-## <a name="Soal10"></a> Soal 10
-Karena kepala suku ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level. 
-
+### Masuk ke Host `TurkRegion`, `GrobeForest`, `LaubHills`, dan `SchwerMountain`
+Ujicoba dengan melakukan ping ke IP `10.71.14.150` secara bersamaan.
 
