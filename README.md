@@ -14,7 +14,7 @@
 
 
 # <a name="Topologi"></a> Topologi
- <img width="411" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
+ <img width="678" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
 
 # <a name="TabelPerhitungan"></a> Tabel Perhitungan
 ![WhatsApp Image 2023-12-19 at 16 24 45_2e33c4b1](https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/ca6ce936-5fb8-4cae-8d11-d96cfb2834e9)
@@ -135,7 +135,7 @@ iface eth2 inet static
 	netmask 255.255.255.252
 ```
 
-## Config Server
+## Konfig Server
 - Richter <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
 ```
@@ -303,7 +303,7 @@ Kemudian restart bind9 dengan command
 ## Konfig DHCP pada Revolte
 - Lakukan konfigurasi pada `Aura`, `Heiter`, `Frieren`, `Himmel`, `Fern`
 
-Config dengan memasukkan IP Richter `10.71.14.150` ke `/etc/default/isc-dhcp-relay`
+Kemudian lakukan konfigurasi dengan memasukkan IP Richter `10.71.14.150` ke `/etc/default/isc-dhcp-relay`
 ```
 apt-get update
 apt-get install isc-dhcp-relay -y
