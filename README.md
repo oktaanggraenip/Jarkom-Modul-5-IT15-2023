@@ -6,21 +6,21 @@
 | Brigita Naraduhita P.P. | 5027211055  |
 
 ## Daftar Isi
-- [Topologi]
-- [Tabel Perhitungan]
-- [Konfigurasi GNS]
-- [Routing]
-- [Pengerjaan Soal]
+- [Topologi](#Topologi)
+- [Tabel Perhitungan](#TabelPerhitungan)
+- [Konfigurasi GNS](#KonfigurasiGNS)
+- [Routing](#Routing)
+- [Pengerjaan Soal](#PengerjaanSoal)
 
 
-# Topologi
+# <a name="Topologi"></a> Topologi
  <img width="411" alt="Pembagian Subnet" src="https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/62d8969f-ab6d-40a6-904c-3169dd00a26f">
 
-# Tabel Perhitungan
+# <a name="TabelPerhitungan"></a> Tabel Perhitungan
 ![WhatsApp Image 2023-12-19 at 16 24 45_2e33c4b1](https://github.com/oktaanggraenip/Jarkom-Modul-5-IT15-2023/assets/102397053/ca6ce936-5fb8-4cae-8d11-d96cfb2834e9)
 
 
-# Konfigurasi GNS
+# <a name="KonfigurasiGNS"></a> Konfigurasi GNS
 ## Konfig Router
 - Aura <br>
 Tambahkan nameserver sebagai berikut `echo 'nameserver 192.168.122.1' > /etc/resolv.conf`
@@ -224,7 +224,7 @@ iface eth0 inet static
 ```
 
 
-# Routing
+# <a name="Routing"></a> Routing
 - Aura
 ```
 route add -net 10.71.14.132 netmask 255.255.255.252 gw 10.71.14.134
@@ -401,6 +401,7 @@ subnet 10.71.14.128 netmask 255.255.255.252 {
 ```
 Kemudian restart dhcp server dengan command `service isc-dhcp-server restart` <br>
 
+# <a name="PengerjaanSoal"></a> Pengerjaan Soal
 ## Soal 1
 #### Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Aura menggunakan iptables, tetapi tidak ingin menggunakan MASQUERADE.
 Jawab:
